@@ -5,27 +5,20 @@ import { pizzas } from '../data/pizzas';
 
 import CardPizza from './CardPizza'; 
 
-function Home({ onAddToCart }) {
-  
+const Home = () => {
   return (
-    <div className="home-container">
-      <h2>¡Nuestro Menú!</h2>
-      <div className="pizza-grid">
-
-        {pizzas.map(pizza => (
-          <CardPizza
-            key={pizza.id}
-            pizza={pizza}
-            img={img}
-            name={name}
-            price={price}
-            ingredients={ingredients}
-            onAddToCart={onAddToCart}
-          />
-        ))}
-      </div>
+    <div className="container d-flex justify-content-center flex-wrap gap-4 mt-4 pb-5">
+      {pizzas.map((pizza) => (
+        <CardPizza
+          key={pizza.id}
+          name={pizza.name}
+          price={pizza.price}
+          ingredients={pizza.ingredients}
+          img={pizza.img}
+        />
+      ))}
     </div>
   );
-}
+};
 
 export default Home;
