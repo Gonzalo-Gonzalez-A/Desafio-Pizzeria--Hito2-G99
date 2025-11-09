@@ -13,7 +13,7 @@ const App = () => {
       <Navbar />
       {/* <Home /> */}
       {/* <CardPizza /> */}
-      <Card />
+      <Cart />
       {/* <Login /> */}
       {/* <RegisterPage /> */}
       <Footer />
