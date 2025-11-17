@@ -1,10 +1,3 @@
-
-import React from 'react';
-
-import { pizzas } from '../data/pizzas'; 
-
-import CardPizza from './CardPizza'; 
-
 import React, { useState, useEffect } from 'react';
 import PizzaCard from './PizzaCard'; // Un componente para cada tarjeta
 
@@ -42,8 +35,6 @@ function Home() {
             nombre={pizza.nombre}
             precio={pizza.precio}
             imagen={pizza.img}
-            descripcion={pizza.desc}
-            ingredientes={pizza.ingredients}
             // ... otras props
           />
         ))
@@ -54,6 +45,5 @@ function Home() {
     </div>
   );
 }
-
 
 export default Home;
