@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import RegisterPage from "./components/RegisterPage";
 import Cart from "./components/Cart";
+import React from "react";
+import Pizzas from "./components/Pizzas";
 
 const App = () => {
   return (
@@ -13,9 +15,10 @@ const App = () => {
       <Navbar />
       {/* <Home /> */}
       {/* <CardPizza /> */}
-      <Cart />
+      {/* <Cart /> */}
       {/* <Login /> */}
       {/* <RegisterPage /> */}
+      <Pizzas />
       <Footer />
     </div>
   );
