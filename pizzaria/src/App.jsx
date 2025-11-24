@@ -10,6 +10,7 @@ import Register from "./components/Pages/Register";
 import HomePage from "./components/Pages/HomePage";
 import Main from "./components/Main";
 import Profile from "./components/Pages/Profile";
+import NotFound from "./components/Pages/NotFound";
 import './App.css';
 
 
@@ -27,7 +28,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/pizzas/:id" element={<CardPizza />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Main>
       
