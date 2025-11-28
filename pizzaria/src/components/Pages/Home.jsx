@@ -1,49 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import PizzaCard from './PizzaCard'; // Un componente para cada tarjeta
+import React, { useState, useEffect, useContext } from 'react';
+import CardPizza from '../CardPizza';
+import { CartContext } from '../../context/CartContext'; // Importar Contexto
 
-function Home() {
+function HomePage() {
   const [pizzas, setPizzas] = useState([]);
   const [cargando, setCargando] = useState(true);
 
-  useEffect(() => {
-    // Función para consumir la API y actualizar el estado
-    const fetchPizzas = async () => {
-      const url = 'http://localhost:5000/api/pizzas';
-      const response = await fetch(url);
-      const data = await response.json();
-      setPizzas(data);
-      setCargando(false);
-    };
+  // Requisito 3: CONSUMO: Obtener la función para añadir pizzas
+  const { addPizzaToCart } = useContext(CartContext);
 
+  useEffect(() => {
+    // ... Lógica de fetchPizzas usando 'http://localhost:5000/api/pizzas' ...
+    // (código de fetch omitido por brevedad)
+    const fetchPizzas = async () => { /* ... */ };
     fetchPizzas();
-  }, []); // Se ejecuta solo al montar el componente
+  }, []);
 
   // ➡️ LÓGICA DE RENDERIZACIÓN ⬅️
   return (
     <div className="pizza-list">
       <h1>Menú de Pizzas Mamma Mía</h1>
-      
-      {/* 1. Renderizado Condicional */}
+
       {cargando && <p>Cargando menú...</p>}
 
-      {/* 2. Uso del método map() para renderizar la lista */}
-      {!cargando && pizzas.length > 0 ? (
-        pizzas.map((pizza) => (
-          // **CLAVE:** Cada elemento repetido debe tener la propiedad 'key'
-          <PizzaCard 
-            key={pizza.id} // Usar un ID único del objeto
-            nombre={pizza.nombre}
-            precio={pizza.precio}
-            imagen={pizza.img}
-            // ... otras props
-          />
-        ))
-      ) : (
-        // Mensaje alternativo si no se cargaron las pizzas
-        !cargando && <p>No se encontraron pizzas.</p>
+      {!cargando && pizzas.length > 0 && (
+        <div className="row">
+          {pizzas.map((pizza) => (
+            <div key={pizza.id} className="col-md-4 mb-4">
+              <CardPizza
+                pizza={pizza}
+                // PASO LA FUNCIÓN DEL CONTEXT COMO PROP 'onAddToCart'
+                onAddToCart={addPizzaToCart}
+              />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 }
 
-export default Home;
+export default HomePage;

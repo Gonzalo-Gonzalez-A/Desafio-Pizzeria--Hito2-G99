@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Pizza from '../CardPizza';
 
 function Pizza() {
   const [pizza, setPizza] = useState(null); 
   const [cargando, setCargando] = useState(true);
+  const {id} = useParams(); 
 
   useEffect(() => {
     const fetchPizza = async () => {
@@ -14,7 +15,7 @@ function Pizza() {
       setPizza(data);
       setCargando(false);
     };
-    
+  if (!pizza)     
     fetchPizza();
   }, []);
 
