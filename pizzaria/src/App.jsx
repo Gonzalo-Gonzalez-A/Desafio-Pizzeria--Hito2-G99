@@ -10,28 +10,27 @@ import Register from "./components/Pages/Register";
 import HomePage from "./components/Pages/HomePage";
 import Main from "./components/Main";
 import Profile from "./components/Pages/Profile";
-import CartProvider from "./context/CardContext";
 import './App.css';
 
 
 const App = () => {
   return (
     <div>
-      <CartProvider>
-        <Navbar />
-        <Main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/pizzas" element={<Pizza />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/pizzas/:id" element={<CardPizza />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="*" element={<h1>404 - Page Not Found</h1>} />
-          </Routes>
-        </Main>
-      </CartProvider>
+      <Navbar />
+
+      <Main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/pizzas" element={<Pizza />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/pizzas/:id" element={<CardPizza />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+        </Routes>
+      </Main>
+      
       <Footer />
     </div>
   );
