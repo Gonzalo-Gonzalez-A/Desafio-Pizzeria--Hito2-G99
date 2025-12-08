@@ -5,10 +5,10 @@ const UserContext = createContext();
 
 // 2. Crear el Proveedor del Contexto
 export const UserProvider = ({ children }) => {
-  // Estado que almacena el token, por defecto, estará en true (simulando sesión activa) [cite: 23]
+  // Estado que almacena el token, por defecto, estará en true (simulando sesión activa) 
   const [token, setToken] = useState(true);
 
-  // Método logout que cambia el estado del token a false [cite: 26]
+  // Método logout que cambia el estado del token a false
   const logout = () => {
     setToken(false);
   };
