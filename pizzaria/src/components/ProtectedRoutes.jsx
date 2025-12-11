@@ -5,7 +5,7 @@ import { useUserContext } from '../context/UserContext';
 export const ProtectedRoute = ({ redirectTo = '/login' }) => {
   const { token } = useUserContext();
 
-  // Si el token es false, redirige a /login [cite: 34]
+  // Si el token es false, redirige a /login
   if (!token) {
     return <Navigate to={redirectTo} replace />;
   }
@@ -18,7 +18,7 @@ export const ProtectedRoute = ({ redirectTo = '/login' }) => {
 export const PublicOnlyRoute = ({ redirectTo = '/' }) => {
   const { token } = useUserContext();
 
-  // Si el token es true, redirige al home [cite: 35]
+  // Si el token es true, redirige al home 
   if (token) {
     return <Navigate to={redirectTo} replace />;
   }

@@ -1,69 +1,61 @@
-import React, { useContext } from 'react'; // 1. Importar useContext
-import { CartContext } from '../context/CartContext'; // 2. Importar CartContext
+import React, { useState } from 'react';
+import { useUserContext } from '../context/UserContext';
+// Asume que tienes un hook para tu carrito (ej: useCartContext)
+import { useCartContext } from '../context/CartContext'; 
 
-// ❌ Se eliminan las props, ya que los datos se obtienen del contexto
-function Cart() {
-  // 3. Consumir el Contexto y desestructurar los valores y funciones necesarios
-  const {
-    cart: cartItems, // Renombramos 'cart' a 'cartItems' para coincidir con tu lógica de render
-    calculateTotal,
-    incrementItemQuantity, // Función a crear en el Context
-    decrementItemQuantity, // Función a crear en el Context
-    removeItem // Función a crear en el Context
-  } = useContext(CartContext);
+const Cart = () => {
+  const { token } = useUserContext();
+  const { cart, clearCart, calculateTotal } = useCartContext(); 
+  const [successMessage, setSuccessMessage] = useState('');
+  
+  const handleCheckout = async () => {
+    // Evita la llamada si ya está deshabilitado, pero es buena práctica verificar
+    if (!token) return; 
 
-  // 4. Obtener el total (Requisito 5)
-  const total = calculateTotal();
+    try {
+      // REQUERIMIENTO 7: Llamada a /api/checkouts con JWT
+      const response = await fetch('http://localhost:3000/api/checkouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 🔑 CLAVE: Enviar el token en el header Authorization
+          'Authorization': `Bearer ${token}`, 
+        },
+        // Envía el contenido del carrito
+        body: JSON.stringify({ cart: cart }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al procesar el pago. Inténtalo de nuevo.');
+      }
+
+      // REQUERIMIENTO 8: Proceso exitoso
+      setSuccessMessage('¡Pago realizado con éxito! Gracias por tu compra.');
+      clearCart(); 
+      
+    } catch (error) {
+      console.error('Error de checkout:', error);
+      setSuccessMessage('Hubo un error al procesar el pago. Por favor, verifica tu conexión.');
+    }
+  };
 
   return (
-    <div className="cart-container">
-      <h1>🛒 Detalle del Carrito</h1>
-      {cartItems.length === 0 ? (
-        <p>El carrito está vacío. ¡Añade unas deliciosas pizzas!</p>
-      ) : (
-        <>
-          <ul className="cart-list">
-            {/* 1. Recorre el array de pizzaCart (cartItems) y muestra la info */}
-            {cartItems.map(item => (
-              <li key={item.id} className="cart-item">
+    <div className="container mt-5">
+      {/* ... Contenido del carrito ... */}
+      
+      {/* REQUERIMIENTO 8: Muestra el mensaje de éxito/error */}
+      {successMessage && <div className="alert alert-info mt-3">{successMessage}</div>}
 
-                {/* Botón para eliminar completamente el ítem */}
-                <button
-                  className="remove-btn"
-                  onClick={() => removeItem(item.id)} // ✅ Función del Context
-                  title="Eliminar ítem"
-                >
-                  ✖
-                </button>
-
-                <span className="item-name">**{item.name}**</span>
-
-                <div className="item-controls">
-                  {/* 2. Botón para disminuir la cantidad */}
-                  <button onClick={() => decrementItemQuantity(item.id)}>-</button> // ✅ Función del Context
-                  <span className="item-count">Cantidad: **{item.quantity}**</span> {/* Ajustado de 'item.count' a 'item.quantity' por consistencia con el Context */}
-                  {/* 2. Botón para aumentar la cantidad */}
-                  <button onClick={() => incrementItemQuantity(item.id)}>+</button> // ✅ Función del Context
-                </div>
-
-                <span className="item-price">
-                  Subtotal: **${(item.price * item.quantity).toLocaleString('es-CL')}** {/* Usando item.quantity */}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <hr />
-
-          <div className="cart-total">
-            {/* 3. Muestra el total de la compra (Requisito 5) */}
-            <h3>Total a Pagar: **${total.toLocaleString('es-CL')}**</h3>
-            <button className="checkout-button">Pagar Ahora</button>
-          </div>
-        </>
-      )}
+      <button 
+        onClick={handleCheckout} 
+        className="btn btn-success mt-3"
+        // Hito 7: Deshabilitado si no hay token (¡y si el carrito está vacío!)
+        disabled={!token || cart.length === 0} 
+      >
+        Pagar Total: ${calculateTotal().toLocaleString("es-CL")}
+      </button> 
     </div>
   );
-}
+};
 
 export default Cart;

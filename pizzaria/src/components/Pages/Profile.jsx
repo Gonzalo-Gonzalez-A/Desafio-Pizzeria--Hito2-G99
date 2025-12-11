@@ -1,54 +1,39 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useUserContext } from '../context/UserContext'; 
 
 const Profile = () => {
-  // 💡 Hook para navegar a otra página después de cerrar sesión
-  const navigate = useNavigate();
+  const { profile, email, getProfile, logout, token } = useUserContext();
 
-  // Datos estáticos que se actualizarán en el futuro
-  const userEmail = "usuario.ejemplo@pizzeria.cl";
+  useEffect(() => {
+    // Si hay token y aún no cargamos el perfil, lo solicitamos.
+    if (token && !profile) {
+        getProfile();
+    }
+  }, [token, profile, getProfile]);
   
-  // Función placeholder para cerrar sesión
-  const handleLogout = () => {
-    // 1. Aquí se implementaría la lógica real de cerrar la sesión (borrar token, etc.)
-    console.log("Cerrando sesión del usuario:", userEmail);
-    
-    // 2. Navegar al inicio o a la página de login
-    navigate('/'); 
-    alert("Sesión cerrada. Serás redirigido al inicio.");
-  };
+  // Muestra el email del estado local mientras se carga el perfil, o el email del perfil.
+  const displayedEmail = profile ? profile.email : email;
 
   return (
     <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow p-4">
-            <h2 className="card-title text-center mb-4">
-                Mi Perfil 🔐
-            </h2>
-            <div className="text-center mb-4">
-              <p className="lead">
-                **Email del Usuario:**
-              </p>
-              {/* Muestra el email estático */}
-              <p className="h5 text-primary">
-                {userEmail} 
-              </p>
-              <small className="text-muted">
-                (Este dato será dinámico al implementar la autenticación.)
-              </small>
-            </div>
-            
-            {/* Botón para Cerrar Sesión */}
-            <button 
-              className="btn btn-danger btn-lg mt-3"
-              onClick={handleLogout}
-            >
-              🔒 Cerrar Sesión
-            </button>
-          </div>
+      <h1>Mi Perfil</h1>
+      {profile ? (
+        <div className="card p-4">
+          {/* REQUERIMIENTO 5: Muestra el email */}
+          <p><strong>Email del Usuario:</strong> {displayedEmail}</p>
+          {/* Muestra cualquier otro dato que la ruta /api/auth/me devuelva */}
+          
+          {/* REQUERIMIENTO 5: Botón para cerrar sesión */}
+          <button 
+            onClick={logout} 
+            className="btn btn-danger mt-3"
+          >
+            Cerrar Sesión
+          </button>
         </div>
-      </div>
+      ) : (
+        <p>Cargando información del perfil...</p>
+      )}
     </div>
   );
 };
